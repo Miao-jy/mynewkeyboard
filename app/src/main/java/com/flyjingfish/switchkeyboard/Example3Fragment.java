@@ -40,11 +40,8 @@ public class Example3Fragment extends Fragment {
         switchKeyboardUtil.setMenuViewHeightEqualKeyboard(false);
         switchKeyboardUtil.setUseSwitchAnim(true);
         switchKeyboardUtil.setInputEditText(binding.etContent);
-        switchKeyboardUtil.setAudioBtn(binding.tvAudio);
-        switchKeyboardUtil.setAudioTouchView(binding.tvAudioTouch);
         switchKeyboardUtil.setMenuViewContainer(binding.llMenu);
-        switchKeyboardUtil.setToggleMenuViews(new MenuModeView(binding.tvMore,binding.llMenuBtn),
-                new MenuModeView(binding.ivFace,binding.llEmoji),
+        switchKeyboardUtil.setToggleMenuViews(
                 new MenuModeView(binding.tvGift,binding.llGift),
                 new MenuModeView(binding.tvWord,binding.llWord));
         switchKeyboardUtil.attachLifecycle(this);
@@ -70,22 +67,16 @@ public class Example3Fragment extends Fragment {
 
             @Override
             public void onKeyboardShow(int keyboardHeight) {
-                binding.tvAudio.setImageResource(R.drawable.ic_audio);
-                binding.ivFace.setImageResource(R.drawable.ic_face);
             }
 
 
 
             @Override
             public void onShowMenuLayout(View layoutView) {
-                binding.tvAudio.setImageResource(layoutView == binding.tvAudioTouch?R.drawable.ic_keyboard:R.drawable.ic_audio);
-                binding.ivFace.setImageResource(layoutView == binding.llEmoji?R.drawable.ic_keyboard:R.drawable.ic_face);
             }
 
             @Override
             public void onHideMenuViewContainer() {
-                binding.tvAudio.setImageResource(R.drawable.ic_audio);
-                binding.ivFace.setImageResource(R.drawable.ic_face);
             }
         });
         binding.rv.setOnTouchListener((v, event) -> {
@@ -94,7 +85,6 @@ public class Example3Fragment extends Fragment {
             }
             return false;
         });
-        binding.tvVideo.setOnClickListener(v -> Toast.makeText(requireActivity(),"去视频通话",Toast.LENGTH_SHORT).show());
         List<String> msgList = new ArrayList<>();
         for (int i = 0; i < 60; i++) {
             msgList.add("item="+i);

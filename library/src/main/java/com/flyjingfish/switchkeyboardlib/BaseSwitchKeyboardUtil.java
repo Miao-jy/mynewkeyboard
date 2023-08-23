@@ -40,21 +40,26 @@ public class BaseSwitchKeyboardUtil {
     protected SystemKeyboardUtils keyboardUtils;
     protected Handler handler = new Handler(Looper.getMainLooper());
     protected boolean isShowMenu;
-    protected View audioBtn;
-    protected View audioTouchVIew;
     protected EditText etContent;
     protected Activity activity;
     protected LifecycleOwner lifecycleOwner;
     protected ViewGroup menuViewContainer;
+    // no use
     protected boolean menuViewHeightEqualKeyboard;
+    // default use true
     protected boolean useSwitchAnim = true;
+    // default use true
     protected boolean useMenuUpAnim = false;
     protected boolean keyboardIsShow;
     protected int keyboardHeight;
     protected static final int SWITCH_ANIM_SPEED = 2;
+    // no use
     private View.OnTouchListener etContentOnTouchListener;
+    // no use
     private boolean isRecordKeyboardHeight;
+    // default use false
     protected boolean isAutoShowKeyboard;
+    // 自动弹出键盘类型
     protected AutoShowKeyboardType autoShowKeyboardType;
 
     public BaseSwitchKeyboardUtil(Activity activity) {
@@ -75,22 +80,6 @@ public class BaseSwitchKeyboardUtil {
      */
     public void setInputEditText(@NonNull EditText etContent) {
         this.etContent = etContent;
-    }
-
-    /**
-     *
-     * @param audioBtn 语音消息按钮（可为空）
-     */
-    public void setAudioBtn(@Nullable View audioBtn) {
-        this.audioBtn = audioBtn;
-    }
-
-    /**
-     *
-     * @param audioTouchVIew 语音消息按住说话按钮（可为空）
-     */
-    public void setAudioTouchView(@Nullable View audioTouchVIew) {
-        this.audioTouchVIew = audioTouchVIew;
     }
 
     /**
@@ -207,6 +196,7 @@ public class BaseSwitchKeyboardUtil {
         }else {
             checkSoftMode(activity.getWindow(),isAutoShowKeyboard);
         }
+
         int menuHeight = getKeyboardHeight();
         if (menuViewHeightEqualKeyboard){
             ViewGroup.LayoutParams layoutParams = menuViewContainer.getLayoutParams();
@@ -216,53 +206,15 @@ public class BaseSwitchKeyboardUtil {
         if (isRecordKeyboardHeight){
             keyboardHeight  = menuHeight;
         }
-        if (audioBtn != null){
-            audioBtn.setOnClickListener(v -> {
 
-                if (keyboardIsShow){
-                    hideKeyboard();
-                    menuViewContainer.setVisibility(View.GONE);
-                    etContent.setVisibility(View.GONE);
-                    if (audioTouchVIew != null){
-                        audioTouchVIew.setVisibility(View.VISIBLE);
-                    }
-                    if (onKeyboardMenuListener != null){
-                        onKeyboardMenuListener.onShowMenuLayout(audioTouchVIew);
-                    }
-                }else if (menuViewContainer.getVisibility() == View.VISIBLE){
-                    menuViewContainer.setVisibility(View.GONE);
-                    etContent.setVisibility(View.GONE);
-                    if (audioTouchVIew != null){
-                        audioTouchVIew.setVisibility(View.VISIBLE);
-                    }
-                    if (onKeyboardMenuListener != null){
-                        onKeyboardMenuListener.onShowMenuLayout(audioTouchVIew);
-                    }
-                }else if (audioTouchVIew != null && audioTouchVIew.getVisibility() == View.GONE){
-                    etContent.setVisibility(View.GONE);
-                    audioTouchVIew.setVisibility(View.VISIBLE);
-                    if (onKeyboardMenuListener != null){
-                        onKeyboardMenuListener.onShowMenuLayout(audioTouchVIew);
-                    }
-                }else {
-                    etContent.setVisibility(View.VISIBLE);
-                    if (audioTouchVIew != null){
-                        audioTouchVIew.setVisibility(View.GONE);
-                    }
-                    showKeyboard();
-                }
-                isShowMenu = false;
-            });
-        }
-
-        etContent.setOnTouchListener((v, event) -> {
-            if (!keyboardIsShow && event.getAction() == MotionEvent.ACTION_DOWN){
+        etContent.setOnClickListener((v) -> {
+            if (!keyboardIsShow){
                 showKeyboardAnim();
             }
-            if (etContentOnTouchListener != null){
-                return etContentOnTouchListener.onTouch(v,event);
-            }
-            return false;
+//            if (etContentOnTouchListener != null){
+////                return etContentOnTouchListener.onTouch(v,);
+//            }
+//            return false;
         });
     }
 
@@ -349,24 +301,6 @@ public class BaseSwitchKeyboardUtil {
             ViewGroup.LayoutParams layoutParams = menuViewContainer.getLayoutParams();
             layoutParams.height = height;
             menuViewContainer.setLayoutParams(layoutParams);
-//            int startHeight = menuViewContainer.getHeight();
-//            if (menuViewHeightEqualKeyboard || startHeight <= height || !useSwitchAnim){
-//                ViewGroup.LayoutParams layoutParams = menuViewContainer.getLayoutParams();
-//                layoutParams.height = height;
-//                menuViewContainer.setLayoutParams(layoutParams);
-//            }else {
-//                stopSwitchAnim();
-//                ViewHeight viewHeight = new ViewHeight(menuViewContainer);
-//                int distance = Math.abs(startHeight - height);
-//                int duration = distance/SWITCH_ANIM_SPEED;
-//                if (duration<200){
-//                    duration = 200;
-//                }
-//                switchAnim = ObjectAnimator.ofInt(viewHeight,"viewHeight",startHeight,height);
-//                switchAnim.setDuration(duration);
-//                switchAnim.start();
-//            }
-
             menuViewContainer.setVisibility(View.INVISIBLE);
             saveKeyboardHeight(height);
             keyboardHeight = height;
@@ -416,9 +350,6 @@ public class BaseSwitchKeyboardUtil {
         if (!isShowMenu){
             isShowMenu = true;
             menuViewContainer.setVisibility(View.VISIBLE);
-            if (audioTouchVIew != null){
-                audioTouchVIew.setVisibility(View.GONE);
-            }
             etContent.setVisibility(View.VISIBLE);
             if (!menuViewHeightEqualKeyboard && !useSwitchAnim){
                 handler.postDelayed(() -> {
@@ -432,9 +363,6 @@ public class BaseSwitchKeyboardUtil {
         }else {
             isShowMenu = false;
             etContent.setVisibility(View.VISIBLE);
-            if (audioTouchVIew != null){
-                audioTouchVIew.setVisibility(View.GONE);
-            }
             showKeyboard();
         }
         if (onKeyboardMenuListener != null){

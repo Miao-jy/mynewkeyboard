@@ -31,8 +31,6 @@ public class Example2Activity extends AppCompatActivity {
         switchKeyboardUtil.setAutoShowKeyboard(true, AutoShowKeyboardType.FIRST_SHOW);
         switchKeyboardUtil.attachLifecycle(this);
         switchKeyboardUtil.setInputEditText(binding.etContent);
-        switchKeyboardUtil.setAudioBtn(binding.tvAudio);
-        switchKeyboardUtil.setAudioTouchView(binding.tvAudioTouch);
         switchKeyboardUtil.setMenuViewContainer(binding.llMenu);
         switchKeyboardUtil.setToggleMenuViews(new MenuModeView(binding.tvMore, binding.llMenuBtn),
                 new MenuModeView(binding.tvFace, binding.llEmoji, binding.tvFaceBack,true),
